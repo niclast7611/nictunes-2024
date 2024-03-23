@@ -3,7 +3,8 @@ import { AiOutlineHome, AiOutlinePlusCircle } from "react-icons/ai";
 import { HiOutlineLibrary } from "react-icons/hi";
 import { FaRss } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
-import { IoSearch } from "react-icons/io5";
+import { IoSearch, IoLogOutOutline } from "react-icons/io5";
+import { signOut } from "next-auth/react";
 
 type Props = {};
 
@@ -11,6 +12,13 @@ const Sidebar = (props: Props) => {
   return (
     <div className="text-gray-500 p-5 text-sm border-r border-gray-900">
       <div className="space-y-4">
+        <button
+          className="flex items-center space-x-2 hover:text-white"
+          onClick={() => signOut()}
+        >
+          <IoLogOutOutline className="h-5 w-5" />
+          <p>Logout</p>
+        </button>
         <button className="flex items-center space-x-2 hover:text-white">
           <AiOutlineHome className="h-5 w-5" />
           <p>Home</p>
