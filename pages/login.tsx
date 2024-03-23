@@ -17,7 +17,7 @@ const Login = ({ providers }: Props) => {
       {Object.values(providers).map((provider: any) => (
         <div key={provider.name}>
           <button
-            onClick={() => signIn(provider.id)}
+            onClick={() => signIn(provider.id, { callbackUrl: "/" })}
             className="bg-[#18D860] text-white p-5 rounded-full"
           >
             Login with {provider.name}

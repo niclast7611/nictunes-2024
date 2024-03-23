@@ -15,7 +15,7 @@ async function refreshAccessToken(token: any) {
       ...token,
       accessToken: refreshedToken.access_token,
       accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
-      refreshedToken: refreshedToken.refresh_token ?? token.refreshToken,
+      refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
     };
   } catch (error) {
     console.error("Error refreshing token", error);
@@ -26,7 +26,7 @@ async function refreshAccessToken(token: any) {
   }
 }
 
-export const authOptions = {
+export default NextAuth({
   // Configure one or more authentication providers
   providers: [
     SpotifyProvider({
@@ -40,7 +40,7 @@ export const authOptions = {
   pages: {
     signIn: "/login",
   },
-  callback: {
+  callbacks: {
     async jwt({
       token,
       account,
@@ -55,9 +55,9 @@ export const authOptions = {
       if (account && user) {
         return {
           ...token,
-          accessToken: account.accessToken,
-          refreshToken: account.refreshToken,
-          username: account.providerAccoundId,
+          accessToken: account.access_token,
+          refreshToken: account.refresh_token,
+          username: account.providerAccountId,
           accessTokenExpires: account.expires_at * 1000,
         };
       }
@@ -81,6 +81,4 @@ export const authOptions = {
       return session;
     },
   },
-};
-
-export default NextAuth(authOptions);
+});

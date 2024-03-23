@@ -4,11 +4,13 @@ import { HiOutlineLibrary } from "react-icons/hi";
 import { FaRss } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { IoSearch, IoLogOutOutline } from "react-icons/io5";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 type Props = {};
 
 const Sidebar = (props: Props) => {
+  const { data: session, status } = useSession();
+
   return (
     <div className="text-gray-500 p-5 text-sm border-r border-gray-900">
       <div className="space-y-4">
