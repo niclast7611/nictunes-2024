@@ -11,7 +11,7 @@ const Home = () => {
         <Sidebar />
         <Center />
       </main>
-      <div className="sticky bottom-20">
+      <div className="sticky bottom-0">
         <Player />
       </div>
     </div>

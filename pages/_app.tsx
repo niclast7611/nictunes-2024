@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { persistor, store } from "../app/store";
 import { PersistGate } from "redux-persist/integration/react";
-
+import "../app/globals.css";
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <Provider store={store}>

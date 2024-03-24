@@ -24,7 +24,7 @@ const Center = (props: Props) => {
   const [color, setColor] = useState("red-500");
   const playlistId = useAppSelector((state) => state.playlistId);
   const playlist = useAppSelector((state) => state.playlist)?.playlist;
-  console.log("playlist", playlist);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -32,13 +32,14 @@ const Center = (props: Props) => {
   }, [playlistId]);
 
   useEffect(() => {
-    if (!playlistId.playlistId) return;
-    spotifyApi
-      .getPlaylist(playlistId.playlistId)
-      .then((data) => {
-        dispatch(setPlaylist(data.body));
-      })
-      .catch((err) => console.log(err));
+    if (playlistId.playlistId) {
+      spotifyApi
+        .getPlaylist(playlistId.playlistId)
+        .then((data) => {
+          dispatch(setPlaylist(data.body));
+        })
+        .catch((err) => console.log(err));
+    }
   }, [playlistId, spotifyApi]);
 
   return (

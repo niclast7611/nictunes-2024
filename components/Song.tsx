@@ -13,20 +13,18 @@ type Props = {
 const Song = ({ track, order }: Props) => {
   const spotifyApi = useSpotify();
 
-  const songId = useAppSelector((state) => state.song.songId);
-  const isPlaying = useAppSelector((state) => state.isPlaying.isPlaying);
   const dispatch = useAppDispatch();
-
-  console.log("songId", songId);
+  const deviceId = useAppSelector((state) => state.deviceId.deviceId);
 
   const playSong = () => {
     try {
+      if (!deviceId) return;
       dispatch(setSong(track.track.id));
       dispatch(setIsPlaying(true));
-      console.log("Playing song", track);
-      // spotifyApi.play({
-      //   uris: [track.track.preview_url],
-      // });
+      spotifyApi.play({
+        uris: [track.track.uri],
+        device_id: deviceId,
+      });
     } catch (error) {
       console.error(error);
     }
