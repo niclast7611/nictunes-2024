@@ -1,6 +1,9 @@
+import { decrement, increment } from "@/features/counterSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { useSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
 type Props = {};
 
@@ -22,6 +25,10 @@ const Center = (props: Props) => {
     setColor(colors[Math.floor(Math.random() * colors.length)]);
   }, []);
 
+  const dispatch = useAppDispatch();
+  const count = useAppSelector((state) => state.counter.value);
+
+  console.log("count", count);
   return (
     <div className="flex-grow">
       <header className="absolute top-5 right-8">
@@ -42,7 +49,8 @@ const Center = (props: Props) => {
       <section
         className={`flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white p-8`}
       >
-        <h1>Hello</h1>
+        <button onClick={() => dispatch(increment())}>increment</button>
+        <button onClick={() => dispatch(decrement())}>decrement</button>
       </section>
     </div>
   );
