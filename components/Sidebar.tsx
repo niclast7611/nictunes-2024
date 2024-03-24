@@ -6,26 +6,28 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoSearch, IoLogOutOutline } from "react-icons/io5";
 import { signOut, useSession } from "next-auth/react";
 import useSpotify from "@/hooks/useSpotify";
+import { useAppDispatch } from "@/hooks/hooks";
+import { setPlaylistId } from "@/features/playlistIdSlice";
 
 type Props = {};
 
 const Sidebar = (props: Props) => {
   const spotifyApi = useSpotify();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [playlists, setPlaylists] = useState<any[]>([]);
-  const [playlistId, setPlaylistId] = useState<string | null>(null);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
       spotifyApi.getUserPlaylists().then((data) => {
-        console.log("data", data);
         setPlaylists(data.body?.items);
       });
     }
   }, [session, spotifyApi]);
 
   return (
-    <div className="text-gray-500 p-5 text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide">
+    <div className="text-gray-500 p-5 text-xs border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide lg:text-sm sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex">
       <div className="space-y-4">
         <button
           className="flex items-center space-x-2 hover:text-white"
@@ -64,7 +66,7 @@ const Sidebar = (props: Props) => {
           <p
             className="cursor-pointer hover:text-white"
             key={playlist?.id}
-            onClick={() => setPlaylistId(playlist?.id)}
+            onClick={() => dispatch(setPlaylistId(playlist?.id))}
           >
             {playlist?.name}
           </p>

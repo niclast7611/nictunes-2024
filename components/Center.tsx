@@ -1,9 +1,9 @@
-import { decrement, increment } from "@/features/counterSlice";
+import { setPlaylist } from "@/features/playlistSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import useSpotify from "@/hooks/useSpotify";
 import { useSession } from "next-auth/react";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
 
 type Props = {};
 
@@ -19,20 +19,31 @@ const colors = [
 
 const Center = (props: Props) => {
   const { data: session } = useSession();
+  const spotifyApi = useSpotify();
   const [color, setColor] = useState("red-500");
+  const playlistId = useAppSelector((state) => state.playlistId);
+  const playlist = useAppSelector((state) => state.playlist)?.playlist;
+  console.log("playlist", playlist);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setColor(colors[Math.floor(Math.random() * colors.length)]);
-  }, []);
+  }, [playlistId]);
 
-  const dispatch = useAppDispatch();
-  const count = useAppSelector((state) => state.counter.value);
+  useEffect(() => {
+    if (!playlistId.playlistId) return;
+    spotifyApi
+      .getPlaylist(playlistId.playlistId)
+      .then((data) => {
+        dispatch(setPlaylist(data.body));
+      })
+      .catch((err) => console.log(err));
+  }, [playlistId, spotifyApi]);
 
-  console.log("count", count);
   return (
     <div className="flex-grow">
       <header className="absolute top-5 right-8">
-        <div className="flex items-center bg-red-300 space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2">
+        <div className="flex items-center bg-black space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2 text-white">
           <img
             src={
               session?.user?.image ??
@@ -42,16 +53,28 @@ const Center = (props: Props) => {
             className="rounded-full w-10 h-10"
           />
           <h2>{session?.user?.name}</h2>
-          <FaChevronDown className="h-5 w-5" />
+          <FaChevronDown className="h-4 w-4" />
         </div>
       </header>
 
       <section
         className={`flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white p-8`}
       >
-        <button onClick={() => dispatch(increment())}>increment</button>
-        <button onClick={() => dispatch(decrement())}>decrement</button>
+        <img
+          src={playlist?.images?.[0]?.url}
+          alt={playlist?.name}
+          className="h-44 w-44 shadow-2xl"
+        />
+
+        <div>
+          <p>PLAYLIST</p>
+          <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold">
+            {playlist?.name}
+          </h1>
+        </div>
       </section>
+
+      <div>{/* <Songs/> */}</div>
     </div>
   );
 };

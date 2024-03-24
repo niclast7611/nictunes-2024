@@ -1,11 +1,12 @@
 // Assuming this is in a file where you configure your store
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counterSlice';
-
+import playlistIdReducer from '../features/playlistIdSlice';
+import playlistReducer from '../features/playlistSlice';
 // Define your store as usual
 const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    playlistId: playlistIdReducer,
+    playlist: playlistReducer,
   },
 });
 
