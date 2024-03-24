@@ -24,6 +24,10 @@ const Login = ({ providers }: Props) => {
           </button>
         </div>
       ))}
+
+      <p className="text-center text-white mt-10">
+        You need a premium Spotify account to play music.
+      </p>
     </div>
   );
 };
