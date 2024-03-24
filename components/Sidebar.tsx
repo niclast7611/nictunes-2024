@@ -6,7 +6,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoSearch, IoLogOutOutline } from "react-icons/io5";
 import { signOut, useSession } from "next-auth/react";
 import useSpotify from "@/hooks/useSpotify";
-import { useAppDispatch } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setPlaylistId } from "@/features/playlistIdSlice";
 
 type Props = {};
@@ -15,6 +15,7 @@ const Sidebar = (props: Props) => {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const [playlists, setPlaylists] = useState<any[]>([]);
+  const playlistId = useAppSelector((state) => state.playlistId.playlistId);
 
   const dispatch = useAppDispatch();
 
@@ -26,12 +27,20 @@ const Sidebar = (props: Props) => {
     }
   }, [session, spotifyApi]);
 
+  useEffect(() => {
+    if (!playlistId) {
+      dispatch(setPlaylistId(playlists[0]?.id));
+    }
+  }, []);
+
   return (
     <div className="text-gray-500 p-5 text-xs border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide lg:text-sm sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex">
       <div className="space-y-4">
         <button
           className="flex items-center space-x-2 hover:text-white"
-          onClick={() => signOut()}
+          onClick={() => {
+            signOut();
+          }}
         >
           <IoLogOutOutline className="h-5 w-5" />
           <p>Logout</p>
@@ -64,7 +73,11 @@ const Sidebar = (props: Props) => {
         <hr className="border-t-[0.1px] border-gray-500" />
         {playlists.map((playlist) => (
           <p
-            className="cursor-pointer hover:text-white"
+            className={
+              playlistId === playlist.id
+                ? "cursor-pointer text-white hover:text-white"
+                : "cursor-pointer hover:text-white"
+            }
             key={playlist?.id}
             onClick={() => dispatch(setPlaylistId(playlist?.id))}
           >

@@ -24,7 +24,7 @@ const Center = (props: Props) => {
   const [color, setColor] = useState("red-500");
   const playlistId = useAppSelector((state) => state.playlistId);
   const playlist = useAppSelector((state) => state.playlist)?.playlist;
-
+  console.log("playlist", playlist);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -46,14 +46,17 @@ const Center = (props: Props) => {
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
       <header className="absolute top-5 right-8">
         <div className="flex items-center bg-black space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2 text-white">
-          <img
-            src={
-              session?.user?.image ??
-              "https://www.highsnobiety.com/static-assets/dato/1696613219-drake-for-all-the-dogs-lyrics.jpg"
-            }
-            alt="Profile"
-            className="rounded-full w-10 h-10"
-          />
+          {session?.user?.image ? (
+            <img
+              src={session?.user?.image}
+              alt="Profile"
+              className="rounded-full w-10 h-10"
+            />
+          ) : (
+            <h1 className="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
+              {session?.user?.name?.[0]}
+            </h1>
+          )}
           <h2>{session?.user?.name}</h2>
           <FaChevronDown className="h-4 w-4" />
         </div>

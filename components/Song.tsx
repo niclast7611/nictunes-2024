@@ -15,6 +15,7 @@ const Song = ({ track, order }: Props) => {
 
   const dispatch = useAppDispatch();
   const deviceId = useAppSelector((state) => state.deviceId.deviceId);
+  const songId = useAppSelector((state) => state.song.songId);
 
   const playSong = () => {
     try {
@@ -29,21 +30,30 @@ const Song = ({ track, order }: Props) => {
       console.error(error);
     }
   };
-
   return (
     <div
       className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer"
       onClick={playSong}
     >
       <div className="flex items-center space-x-4">
-        <p>{order++}</p>
+        <p className={track?.track.id === songId ? "text-[#1fde64]" : ""}>
+          {order++}
+        </p>
         <img
           src={track?.track.album.images[0].url}
           alt={track?.track.album.name}
           className="h-10 w-10"
         />
         <div>
-          <p className="w-36 lg:w-64 text-white truncate">{track.track.name}</p>
+          <p
+            className={
+              track?.track.id === songId
+                ? "w-36 lg:w-64 text-[#1fde64] truncate"
+                : "w-36 lg:w-64 text-white truncate"
+            }
+          >
+            {track.track.name}
+          </p>
           <p className="w-40">{track.track.artists[0].name}</p>
         </div>
       </div>
